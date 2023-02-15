@@ -1,6 +1,13 @@
 package com.android.cyberdivetest
 
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
 /**
  * Created by Sidharth Sethia on 14/02/23.
- */class CyberDiveApplication {
+ */
+
+@HiltAndroidApp
+class CyberDiveApplication : Application() {
+
 }

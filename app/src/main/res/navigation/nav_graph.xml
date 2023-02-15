@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/nav_grpah">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_grpah"
+    app:startDestination="@id/appListFragment">
 
+    <fragment
+        android:id="@+id/appListFragment"
+        android:name="com.android.cyberdivetest.ui.views.fragments.AppListFragment"
+        android:label="AppListFragment" >
+        <action
+            android:id="@+id/action_appListFragment_to_appTimeLimitFragment"
+            app:destination="@id/appTimeLimitFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/appTimeLimitFragment"
+        android:name="com.android.cyberdivetest.ui.views.fragments.AppTimeLimitFragment"
+        android:label="AppTimeLimitFragment" >
+        <action
+            android:id="@+id/action_appTimeLimitFragment_to_appListFragment"
+            app:destination="@id/appListFragment" />
+    </fragment>
 </navigation>

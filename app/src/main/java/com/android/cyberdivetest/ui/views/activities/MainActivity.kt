@@ -1,4 +1,4 @@
-package com.android.cyberdivetest.ui
+package com.android.cyberdivetest.ui.views.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

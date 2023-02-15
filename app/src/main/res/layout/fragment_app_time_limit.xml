@@ -2,14 +2,52 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_page_title"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/recycler_view"/>
+        android:layout_marginTop="@dimen/border_big"
+        android:layout_marginStart="@dimen/border_regular"
+        android:textSize="@dimen/text_size_page_title"
+        tools:text = "App Name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_time_limit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_page_title"
+        android:layout_marginTop="@dimen/border_big"
+        android:layout_marginStart="@dimen/border_regular"
+        android:textSize="@dimen/text_size_title"
+        android:text = "@string/app_time_limit" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_time_limit_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_limit"
+        android:layout_marginTop="@dimen/border_big"
+        android:layout_marginStart="@dimen/border_regular"
+        android:textSize="@dimen/text_size_page_title"
+        tools:text = "30 min" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_limit_value"
+        android:layout_marginTop="@dimen/border_big"
+        android:layout_marginStart="@dimen/border_regular"
+        android:textSize="@dimen/text_size_page_title"
+        android:text = "@string/app_save" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CyberdiveTest</string>
+    <string name="app_time_limit">Time limit</string>
+    <string name="app_save">Save</string>
 </resources>
