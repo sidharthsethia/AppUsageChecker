@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_grpah"
-    app:startDestination="@id/appListFragment">
+    app:startDestination="@id/usageStatsPermissionFragment">
 
     <fragment
         android:id="@+id/appListFragment"
@@ -19,5 +19,15 @@
         <action
             android:id="@+id/action_appTimeLimitFragment_to_appListFragment"
             app:destination="@id/appListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/usageStatsPermissionFragment"
+        android:name="com.android.cyberdivetest.ui.views.fragments.UsageStatsPermissionFragment"
+        android:label="UsageStatsPermissionFragment" >
+        <action
+            android:id="@+id/action_usageStatsPermissionFragment_to_appListFragment"
+            app:destination="@id/appListFragment"
+            app:popUpTo="@+id/usageStatsPermissionFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="border_smaller">16dp</dimen>
+    <dimen name="border_smaller">12dp</dimen>
     <dimen name="border_small">16dp</dimen>
     <dimen name="border_regular">20dp</dimen>
     <dimen name="border_big">24dp</dimen>
     <dimen name="text_size_title">18sp</dimen>
     <dimen name="text_size_regular">16sp</dimen>
     <dimen name="text_size_page_title">20sp</dimen>
+    <dimen name="app_icon_size">48dp</dimen>
 </resources>
