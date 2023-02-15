@@ -19,11 +19,11 @@ class MainActivityViewModel @Inject constructor(
 
     val appListStateFlow = repository.getAppListItems()
 
-    init {
-        viewModelScope.launch { repository.fetchApps() }
-    }
-
     fun onItemSelected(item: AppListItem) {
 
+    }
+
+    fun update() {
+        viewModelScope.launch { repository.fetchApps() }
     }
 }

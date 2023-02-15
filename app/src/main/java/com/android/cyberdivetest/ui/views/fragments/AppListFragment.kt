@@ -52,4 +52,9 @@ class AppListFragment: Fragment() {
                 .launchIn(this)
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.update()
+    }
 }
