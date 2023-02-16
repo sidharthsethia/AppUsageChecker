@@ -8,7 +8,7 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.android.cyberdivetest.others.Constants
 import com.android.cyberdivetest.workers.AppUsageCheckerWorker
-import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -16,8 +16,8 @@ import javax.inject.Inject
 /**
  * Created by Sidharth Sethia on 16/02/23.
  */
-class AppUsageCheckerImpl @Inject constructor(
-    @ActivityContext private val context: Context
+class AppUsageCheckerSchedulerImpl @Inject constructor(
+    @ApplicationContext private val context: Context
     ): AppUsageCheckerScheduler {
 
     override fun schedulePeriodicAppUsageChecker() {

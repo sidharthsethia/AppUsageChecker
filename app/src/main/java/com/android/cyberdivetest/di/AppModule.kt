@@ -13,6 +13,8 @@ import com.android.cyberdivetest.helpers.AppListFetcher
 import com.android.cyberdivetest.helpers.AppListFetcherImpl
 import com.android.cyberdivetest.helpers.AppTimeSpentCalculator
 import com.android.cyberdivetest.helpers.AppTimeSpentCalculatorImpl
+import com.android.cyberdivetest.helpers.AppUsageCheckerScheduler
+import com.android.cyberdivetest.helpers.AppUsageCheckerSchedulerImpl
 import com.android.cyberdivetest.helpers.DBCleanupScheduler
 import com.android.cyberdivetest.helpers.DBCleanupSchedulerImpl
 import com.android.cyberdivetest.helpers.ForegroundAppChecker
@@ -148,4 +150,9 @@ object AppModule {
     fun provideDBCleanupScheduler(
         @ApplicationContext context: Context
     ): DBCleanupScheduler = DBCleanupSchedulerImpl(context)
+
+    @Provides
+    fun provideAppUsageCheckerScheduler(
+        @ApplicationContext context: Context
+    ): AppUsageCheckerScheduler = AppUsageCheckerSchedulerImpl(context)
 }
