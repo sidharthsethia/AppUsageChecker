@@ -13,6 +13,8 @@ object Constants {
     // Service notification constants
     const val SERVICE_NOTIFICATION_ID = 1
     const val SERVICE_NOTIFICATION_CHANNEL = "cyberdive_service_channel"
+    const val ALERT_NOTIFICATION_ID = 2
+    const val ALERT_NOTIFICATION_CHANNEL = "cyberdive_alert_channel"
 
     // Service Launch - Periodic worker constants
     const val PERIODIC_SERVICE_LAUNCHER_INTERVAL_IN_MIN = 16

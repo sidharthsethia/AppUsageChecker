@@ -97,7 +97,7 @@ class AppUsageCheckService : LifecycleService() {
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(
-                Constants.SERVICE_NOTIFICATION_ID,
+                Constants.ALERT_NOTIFICATION_ID,
                 notification
             )
         }
@@ -112,7 +112,7 @@ class AppUsageCheckService : LifecycleService() {
         )
 
         val notificationBuilder =
-            NotificationCompat.Builder(this, Constants.SERVICE_NOTIFICATION_CHANNEL)
+            NotificationCompat.Builder(this, Constants.ALERT_NOTIFICATION_CHANNEL)
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle(getString(R.string.app_overuse_alert_title, item.appName))
                 .setContentText(getString(R.string.app_overuse_alert_message))

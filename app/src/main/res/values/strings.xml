@@ -15,4 +15,5 @@
     <string name="app_ignore">Ignore</string>
     <string name="app_leave_app">Leave app</string>
     <string name="app_monitoring_notification_channel_name">App Usage Monitoring</string>
+    <string name="app_alert_notification_channel_name">Alerts</string>
 </resources>
