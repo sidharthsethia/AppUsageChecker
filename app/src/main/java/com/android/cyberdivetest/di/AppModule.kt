@@ -19,8 +19,6 @@ import com.android.cyberdivetest.helpers.ForegroundAppChecker
 import com.android.cyberdivetest.helpers.ForegroundAppCheckerImpl
 import com.android.cyberdivetest.helpers.ScreenOnChecker
 import com.android.cyberdivetest.helpers.ScreenOnCheckerImpl
-import com.android.cyberdivetest.helpers.ServiceScheduler
-import com.android.cyberdivetest.helpers.ServiceSchedulerImpl
 import com.android.cyberdivetest.helpers.StringFetcher
 import com.android.cyberdivetest.helpers.StringFetcherImpl
 import com.android.cyberdivetest.helpers.UsageStatsPermissionChecker
@@ -30,6 +28,7 @@ import com.android.cyberdivetest.repo.AppListRepository
 import com.android.cyberdivetest.repo.AppRepository
 import com.android.cyberdivetest.repo.AppTimeLimitRepository
 import com.android.cyberdivetest.repo.AppUsageRepository
+import com.android.cyberdivetest.repo.MonitoredAppCountRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -118,6 +117,11 @@ object AppModule {
     ): AppTimeLimitRepository = appRepository
 
     @Provides
+    fun provideMonitoredAppCountRepository(
+        appRepository: AppRepository
+    ): MonitoredAppCountRepository = appRepository
+
+    @Provides
     fun provideAppUsageRepository(
         appRepository: AppRepository
     ): AppUsageRepository = appRepository
@@ -132,12 +136,6 @@ object AppModule {
     fun provideForegroundAppChecker(
         @ApplicationContext context: Context
     ): ForegroundAppChecker = ForegroundAppCheckerImpl(context)
-
-
-    @Provides
-    fun provideServiceScheduler(
-        @ApplicationContext context: Context
-    ): ServiceScheduler = ServiceSchedulerImpl(context)
 
 
     @Provides

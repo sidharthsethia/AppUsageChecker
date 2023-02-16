@@ -7,22 +7,26 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import com.android.cyberdivetest.others.Constants
-import com.android.cyberdivetest.workers.ServiceLaunchWorker
+import com.android.cyberdivetest.workers.AppUsageCheckerWorker
+import dagger.hilt.android.qualifiers.ActivityContext
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 
 /**
  * Created by Sidharth Sethia on 16/02/23.
  */
-class ServiceSchedulerImpl(private val context: Context): ServiceScheduler {
+class AppUsageCheckerImpl @Inject constructor(
+    @ActivityContext private val context: Context
+    ): AppUsageCheckerScheduler {
 
-    override fun schedulePeriodicServiceLaunch() {
+    override fun schedulePeriodicAppUsageChecker() {
         val periodicLaunchWork = PeriodicWorkRequest.Builder(
-                ServiceLaunchWorker::class.java,
-                Constants.PERIODIC_SERVICE_LAUNCHER_INTERVAL_IN_MIN.toLong(),
+                AppUsageCheckerWorker::class.java,
+                Constants.PERIODIC_APP_USAGE_CHECKER_INTERVAL.toLong(),
                 TimeUnit.MINUTES
             )
-                .addTag(Constants.PERIODIC_SERVICE_LAUNCHER_WORKER_TAG)
+                .addTag(Constants.PERIODIC_APP_USAGE_CHECKER_WORKER_TAG)
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
                     PeriodicWorkRequest.MIN_PERIODIC_FLEX_MILLIS,
@@ -30,21 +34,21 @@ class ServiceSchedulerImpl(private val context: Context): ServiceScheduler {
                 )
                 .build()
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            Constants.PERIODIC_SERVICE_LAUNCHER_WORK_NAME,
+            Constants.PERIODIC_APP_USAGE_CHECKER_WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,  //Existing Periodic Work policy
             periodicLaunchWork //work request
         )
     }
 
     override fun scheduleServiceLaunch() {
-        val workRequest = OneTimeWorkRequestBuilder<ServiceLaunchWorker>()
-            .addTag(Constants.ONE_TIME_SERVICE_LAUNCHER_WORKER_TAG)
+        val workRequest = OneTimeWorkRequestBuilder<AppUsageCheckerWorker>()
+            .addTag(Constants.ONE_TIME_APP_USAGE_CHECKER_WORKER_TAG)
             .build()
         WorkManager.getInstance(context).enqueue(workRequest)
     }
 
     override fun cancelFutureLaunches() {
-        WorkManager.getInstance(context).cancelAllWorkByTag(Constants.PERIODIC_SERVICE_LAUNCHER_WORKER_TAG)
-        WorkManager.getInstance(context).cancelAllWorkByTag(Constants.ONE_TIME_SERVICE_LAUNCHER_WORKER_TAG)
+        WorkManager.getInstance(context).cancelAllWorkByTag(Constants.PERIODIC_APP_USAGE_CHECKER_WORKER_TAG)
+        WorkManager.getInstance(context).cancelAllWorkByTag(Constants.ONE_TIME_APP_USAGE_CHECKER_WORKER_TAG)
     }
 }

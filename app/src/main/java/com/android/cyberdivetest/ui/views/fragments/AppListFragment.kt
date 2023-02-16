@@ -11,11 +11,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.cyberdivetest.adapters.AppListAdapter
 import com.android.cyberdivetest.databinding.FragmentAppListBinding
+import com.android.cyberdivetest.helpers.AppUsageCheckerScheduler
 import com.android.cyberdivetest.ui.viewmodels.AppListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Created by Sidharth Sethia on 14/02/23.
@@ -27,6 +29,9 @@ class AppListFragment: Fragment() {
     private lateinit var  binding: FragmentAppListBinding
     private val viewModel: AppListViewModel by viewModels()
     private val adapter: AppListAdapter by lazy { AppListAdapter() }
+
+    @Inject
+    lateinit var appUsageCheckerScheduler: AppUsageCheckerScheduler
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,6 +53,21 @@ class AppListFragment: Fragment() {
                 .flowWithLifecycle(lifecycle)
                 .onEach { adapter.setData(it) }
                 .launchIn(this)
+            viewModel.launchServiceStateFlow
+                .flowWithLifecycle(lifecycle)
+                .onEach { updateAppUsageCheckerSchedule(it) }
+                .launchIn(this)
+        }
+    }
+
+    private fun updateAppUsageCheckerSchedule(schedule: Boolean) {
+        appUsageCheckerScheduler.apply {
+            if (schedule) {
+                scheduleServiceLaunch()
+                schedulePeriodicAppUsageChecker()
+            } else {
+                cancelFutureLaunches()
+            }
         }
     }
 

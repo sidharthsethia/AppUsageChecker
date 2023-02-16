@@ -8,5 +8,4 @@ import kotlinx.coroutines.flow.Flow
  */
 interface AppListRepository: AppDataFetcher {
     fun getAppListItems(): Flow<List<AppListItem>>
-    suspend fun hasMonitoredApps(): Boolean
 }

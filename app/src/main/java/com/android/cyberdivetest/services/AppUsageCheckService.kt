@@ -11,14 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import com.android.cyberdivetest.R
 import com.android.cyberdivetest.data.AppTimeLimitItem
 import com.android.cyberdivetest.data.IgnoredAppInfo
-import com.android.cyberdivetest.helpers.ForegroundAppChecker
-import com.android.cyberdivetest.helpers.ScreenOnChecker
 import com.android.cyberdivetest.others.Constants
 import com.android.cyberdivetest.repo.AppUsageRepository
-import com.android.cyberdivetest.ui.views.activities.KillForegroundActivity
 import com.android.cyberdivetest.ui.views.activities.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -47,7 +43,7 @@ class AppUsageCheckService : LifecycleService() {
             }
         }
 
-        private fun newIgnoreAppIntent(context: Context, item: AppTimeLimitItem): Intent {
+        fun newIgnoreAppIntent(context: Context, item: AppTimeLimitItem): Intent {
             return Intent(context, AppUsageCheckService::class.java).apply {
                 action = ACTION_IGNORE_APP
                 putExtra(KEY_APP_ITEM, item)
@@ -58,12 +54,6 @@ class AppUsageCheckService : LifecycleService() {
     @Inject
     lateinit var repository: AppUsageRepository
 
-    @Inject
-    lateinit var foregroundAppChecker: ForegroundAppChecker
-
-    @Inject
-    lateinit var screenOnChecker: ScreenOnChecker
-
     override fun onCreate() {
         super.onCreate()
         startForeground(Constants.SERVICE_NOTIFICATION_ID, createNotification())
@@ -71,43 +61,20 @@ class AppUsageCheckService : LifecycleService() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        return when (intent.action) {
-            ACTION_STOP -> {
-                stopServiceInternal()
-                START_NOT_STICKY
-            }
+        when (intent.action) {
             ACTION_IGNORE_APP -> {
                 intent.getParcelableExtra<AppTimeLimitItem>(KEY_APP_ITEM)
                     ?.also { handleIgnoreIntent(it) }
-                START_NOT_STICKY
             }
             ACTION_LEAVE_APP -> {
                 stopAlertNotification()
                 stopServiceInternal()
-                START_NOT_STICKY
             }
             else -> {
-                performTasks()
-                START_STICKY
+                stopServiceInternal()
             }
         }
-    }
-
-    private fun performTasks() {
-        lifecycleScope.launch {
-            repository.fetchApps()
-            repository.getOverLimitApps().collectLatest { list ->
-                val currentForegroundAppSet = foregroundAppChecker.getCurrentForegroundApp()
-                list.find { currentForegroundAppSet.contains(it.packageName) }
-                    ?.takeUnless {
-                        repository.isAppIgnored(packageName)
-                    }?.run {
-                        showAlert(this)
-                    } ?: kotlin.run {
-                        stopServiceInternal()
-                    }
-            }
-        }
+        return START_NOT_STICKY
     }
 
     private fun handleIgnoreIntent(item: AppTimeLimitItem) {
@@ -118,54 +85,10 @@ class AppUsageCheckService : LifecycleService() {
         }
     }
 
-    private fun showAlert(item: AppTimeLimitItem) {
-        if (screenOnChecker.isScreenOn()) {
-            val notification = createAlertNotification(item)
-            val notificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.notify(
-                Constants.ALERT_NOTIFICATION_ID,
-                notification
-            )
-        }
-    }
-
     private fun stopAlertNotification() {
         val notificationManager =
             getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(Constants.ALERT_NOTIFICATION_ID)
-    }
-
-    private fun createAlertNotification(item: AppTimeLimitItem): Notification {
-        val activityIntent = KillForegroundActivity.newIntent(this)
-        val activityPendingIntent = PendingIntent.getActivity(
-            this, 0,
-            activityIntent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val notificationBuilder =
-            NotificationCompat.Builder(this, Constants.ALERT_NOTIFICATION_CHANNEL)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
-                .setContentTitle(getString(R.string.app_overuse_alert_title, item.appName))
-                .setContentText(getString(R.string.app_overuse_alert_message))
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .addAction(
-                    0,
-                    getString(R.string.app_ignore),
-                    PendingIntent.getService(
-                        this,
-                        0,
-                        newIgnoreAppIntent(this, item),
-                        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                    )
-                )
-                .addAction(
-                    0,
-                    getString(R.string.app_leave_app),
-                    activityPendingIntent
-                )
-        return notificationBuilder.build()
     }
 
     private fun createNotification(): Notification {
@@ -182,7 +105,7 @@ class AppUsageCheckService : LifecycleService() {
                 getString(R.string.app_stop_monitoring),
                 PendingIntent.getService(
                     this,
-                    0,
+                    Constants.PENDING_INTENT_APP_USAGE_SERVICE,
                     newStopIntent(this),
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )

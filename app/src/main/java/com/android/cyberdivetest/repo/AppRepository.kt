@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
@@ -26,7 +28,7 @@ class AppRepository @Inject constructor(
     private val appInfoDao: AppInfoDao,
     private val monitoredAppInfoDao: MonitoredAppInfoDao,
     private val ignoredAppInfoDao: IgnoredAppInfoDao
-) : AppListRepository, AppTimeLimitRepository, AppUsageRepository {
+) : AppListRepository, AppTimeLimitRepository, AppUsageRepository, MonitoredAppCountRepository {
 
     override suspend fun fetchApps() {
         fetcher.getInstalledApps().collectLatest {
@@ -111,10 +113,7 @@ class AppRepository @Inject constructor(
             ignoredAppInfoDao.findApp(packageName) != null
         }
     }
-
-    override suspend fun hasMonitoredApps(): Boolean {
-        return withContext(Dispatchers.IO) {
-            monitoredAppInfoDao.getMonitoredAppCount() > 0
-        }
+    override fun getMonitoredAppCount(): Flow<Int> {
+        return monitoredAppInfoDao.getMonitoredAppCount().flowOn(Dispatchers.IO)
     }
 }

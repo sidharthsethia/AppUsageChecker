@@ -3,8 +3,8 @@ package com.android.cyberdivetest.helpers
 /**
  * Created by Sidharth Sethia on 16/02/23.
  */
-interface ServiceScheduler {
-    fun schedulePeriodicServiceLaunch()
+interface AppUsageCheckerScheduler {
+    fun schedulePeriodicAppUsageChecker()
     fun scheduleServiceLaunch()
     fun cancelFutureLaunches()
 }

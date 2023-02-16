@@ -17,13 +17,16 @@ object Constants {
     const val ALERT_NOTIFICATION_CHANNEL = "cyberdive_alert_channel"
 
     // Service Launch - Periodic worker constants
-    const val PERIODIC_SERVICE_LAUNCHER_INTERVAL_IN_MIN = 16
-    const val PERIODIC_SERVICE_LAUNCHER_WORKER_TAG = "AppUsageCheckService-PeriodicLauncherWorker"
-    const val PERIODIC_SERVICE_LAUNCHER_WORK_NAME = "PeriodicLaunchOfAppUsageCheckService"
-    const val ONE_TIME_SERVICE_LAUNCHER_WORKER_TAG = "AppUsageCheckService-OneTimeLauncherWorker"
+    const val PERIODIC_APP_USAGE_CHECKER_INTERVAL = ONE_MINUTE_IN_MILLIS * 1
+    const val PERIODIC_APP_USAGE_CHECKER_WORKER_TAG = "PeriodicAppUsageCheckerWorkerTag"
+    const val PERIODIC_APP_USAGE_CHECKER_WORK_NAME = "PeriodicCheckOfAppUsage"
+    const val ONE_TIME_APP_USAGE_CHECKER_WORKER_TAG = "OneTimeAppUsageCheckerWorkerTag"
 
     // DB Cleanup - Periodic worker constants
     const val PERIODIC_DB_CLEANER_INTERVAL_IN_HOURS = 24
     const val PERIODIC_DB_CLEANER_WORKER_TAG = "DBCleaner-PeriodicWorker"
     const val PERIODIC_DB_CLEANER_WORK_NAME = "PeriodicCleanupOfAppDB"
+
+    // Pending intent request codes
+    const val PENDING_INTENT_APP_USAGE_SERVICE = 102
 }

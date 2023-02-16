@@ -37,5 +37,5 @@ interface MonitoredAppInfoDao {
     fun nukeTable()
 
     @Query("SELECT COUNT() FROM MonitoredAppInfo")
-    fun getMonitoredAppCount(): Int
+    fun getMonitoredAppCount(): Flow<Int>
 }
