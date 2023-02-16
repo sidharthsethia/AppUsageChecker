@@ -8,4 +8,11 @@
     <string name="app_time_in_mins">%d min</string>
     <string name="app_usage_stats_permission_rationale">We need the permission for usage history to calculate time spent using apps. \n\nPlease click on continue to provide the permission</string>
     <string name="app_time_in_hr">%d hr</string>
+    <string name="app_service_notification_title">Checking you app usage</string>
+    <string name="app_stop_monitoring">Stop monitoring</string>
+    <string name="app_overuse_alert_title">You have exhausted your time limit for %s</string>
+    <string name="app_overuse_alert_message">Please stop using the app</string>
+    <string name="app_ignore">Ignore</string>
+    <string name="app_leave_app">Leave app</string>
+    <string name="app_monitoring_notification_channel_name">App Usage Monitoring</string>
 </resources>

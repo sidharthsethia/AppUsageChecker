@@ -35,4 +35,7 @@ interface MonitoredAppInfoDao {
 
     @Query("DELETE FROM MonitoredAppInfo")
     fun nukeTable()
+
+    @Query("SELECT COUNT() FROM MonitoredAppInfo")
+    fun getMonitoredAppCount(): Int
 }

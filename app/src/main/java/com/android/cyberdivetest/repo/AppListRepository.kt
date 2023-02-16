@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Created by Sidharth Sethia on 14/02/23.
  */
-interface AppListRepository {
-    suspend fun fetchApps()
+interface AppListRepository: AppDataFetcher {
     fun getAppListItems(): Flow<List<AppListItem>>
+    suspend fun hasMonitoredApps(): Boolean
 }

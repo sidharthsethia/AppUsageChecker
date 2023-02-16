@@ -7,11 +7,20 @@ import android.os.UserManager
 import androidx.room.Room
 import com.android.cyberdivetest.db.AppDB
 import com.android.cyberdivetest.db.AppInfoDao
+import com.android.cyberdivetest.db.IgnoredAppInfoDao
 import com.android.cyberdivetest.db.MonitoredAppInfoDao
 import com.android.cyberdivetest.helpers.AppListFetcher
 import com.android.cyberdivetest.helpers.AppListFetcherImpl
 import com.android.cyberdivetest.helpers.AppTimeSpentCalculator
 import com.android.cyberdivetest.helpers.AppTimeSpentCalculatorImpl
+import com.android.cyberdivetest.helpers.DBCleanupScheduler
+import com.android.cyberdivetest.helpers.DBCleanupSchedulerImpl
+import com.android.cyberdivetest.helpers.ForegroundAppChecker
+import com.android.cyberdivetest.helpers.ForegroundAppCheckerImpl
+import com.android.cyberdivetest.helpers.ScreenOnChecker
+import com.android.cyberdivetest.helpers.ScreenOnCheckerImpl
+import com.android.cyberdivetest.helpers.ServiceScheduler
+import com.android.cyberdivetest.helpers.ServiceSchedulerImpl
 import com.android.cyberdivetest.helpers.StringFetcher
 import com.android.cyberdivetest.helpers.StringFetcherImpl
 import com.android.cyberdivetest.helpers.UsageStatsPermissionChecker
@@ -20,6 +29,7 @@ import com.android.cyberdivetest.others.Constants
 import com.android.cyberdivetest.repo.AppListRepository
 import com.android.cyberdivetest.repo.AppRepository
 import com.android.cyberdivetest.repo.AppTimeLimitRepository
+import com.android.cyberdivetest.repo.AppUsageRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -91,8 +101,11 @@ object AppModule {
     fun provideAppRepository(
         appListFetcher: AppListFetcher,
         appInfoDao: AppInfoDao,
-        monitoredAppInfoDao: MonitoredAppInfoDao
-    ): AppRepository = AppRepository(appListFetcher, appInfoDao, monitoredAppInfoDao)
+        monitoredAppInfoDao: MonitoredAppInfoDao,
+        ignoredAppInfoDao: IgnoredAppInfoDao
+    ): AppRepository = AppRepository(
+        appListFetcher, appInfoDao, monitoredAppInfoDao, ignoredAppInfoDao
+    )
 
     @Provides
     fun provideAppListRepository(
@@ -104,9 +117,38 @@ object AppModule {
         appRepository: AppRepository
     ): AppTimeLimitRepository = appRepository
 
-    @Singleton
+    @Provides
+    fun provideAppUsageRepository(
+        appRepository: AppRepository
+    ): AppUsageRepository = appRepository
+
+
     @Provides
     fun provideStringFetcher(
         @ApplicationContext context: Context
     ): StringFetcher = StringFetcherImpl(context)
+
+    @Provides
+    fun provideForegroundAppChecker(
+        usageStatsManager: UsageStatsManager,
+        permissionChecker: UsageStatsPermissionChecker
+    ): ForegroundAppChecker = ForegroundAppCheckerImpl(usageStatsManager, permissionChecker)
+
+
+    @Provides
+    fun provideServiceScheduler(
+        @ApplicationContext context: Context
+    ): ServiceScheduler = ServiceSchedulerImpl(context)
+
+
+    @Provides
+    fun provideScreenOnChecker(
+        @ApplicationContext context: Context
+    ): ScreenOnChecker = ScreenOnCheckerImpl(context)
+
+
+    @Provides
+    fun provideDBCleanupScheduler(
+        @ApplicationContext context: Context
+    ): DBCleanupScheduler = DBCleanupSchedulerImpl(context)
 }

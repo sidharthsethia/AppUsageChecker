@@ -24,7 +24,7 @@ interface IgnoredAppInfoDao {
     fun getIgnoredApps(): Flow<List<IgnoredAppInfo>>
 
     @Query("SELECT * FROM IgnoredAppInfo WHERE packageName = :packageName")
-    fun findApp(packageName: String): Flow<IgnoredAppInfo?>
+    suspend fun findApp(packageName: String): IgnoredAppInfo?
 
     @Delete
     fun delete(app: IgnoredAppInfo)
