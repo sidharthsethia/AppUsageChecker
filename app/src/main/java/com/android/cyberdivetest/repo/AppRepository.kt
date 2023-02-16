@@ -12,6 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
@@ -83,16 +84,13 @@ class AppRepository @Inject constructor(
                             it.timeSpentInMin,
                             timeLimitMap.getOrDefault(it.packageName, 0)
                         )
-                }
+                    }
             }
     }
 
     override fun getOverLimitApps(): Flow<List<AppTimeLimitItem>> {
-        return getMonitoredApps().transform {list ->
-            list
-                .filter {
-                    it.timeUsedInMin > it.timeLimitInMin
-                }
+        return getMonitoredApps().map { list ->
+            list.filter { it.timeUsedInMin > it.timeLimitInMin }
         }
     }
 

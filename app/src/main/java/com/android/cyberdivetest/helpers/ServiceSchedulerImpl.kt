@@ -40,11 +40,11 @@ class ServiceSchedulerImpl(private val context: Context): ServiceScheduler {
         val workRequest = OneTimeWorkRequestBuilder<ServiceLaunchWorker>()
             .addTag(Constants.ONE_TIME_SERVICE_LAUNCHER_WORKER_TAG)
             .build()
-        WorkManager.getInstance().enqueue(workRequest)
+        WorkManager.getInstance(context).enqueue(workRequest)
     }
 
     override fun cancelFutureLaunches() {
-        WorkManager.getInstance().cancelAllWorkByTag(Constants.PERIODIC_SERVICE_LAUNCHER_WORKER_TAG)
-        WorkManager.getInstance().cancelAllWorkByTag(Constants.ONE_TIME_SERVICE_LAUNCHER_WORKER_TAG)
+        WorkManager.getInstance(context).cancelAllWorkByTag(Constants.PERIODIC_SERVICE_LAUNCHER_WORKER_TAG)
+        WorkManager.getInstance(context).cancelAllWorkByTag(Constants.ONE_TIME_SERVICE_LAUNCHER_WORKER_TAG)
     }
 }

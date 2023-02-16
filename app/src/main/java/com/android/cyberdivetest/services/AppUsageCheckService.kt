@@ -71,8 +71,8 @@ class AppUsageCheckService : LifecycleService() {
         lifecycleScope.launch {
             repository.fetchApps()
             repository.getOverLimitApps().collectLatest { list ->
-                val currentForegroundApp = foregroundAppChecker.getCurrentForegroundApp()
-                list.find { it.packageName == currentForegroundApp }
+                val currentForegroundAppSet = foregroundAppChecker.getCurrentForegroundApp()
+                list.find { currentForegroundAppSet.contains(it.packageName) }
                     ?.takeUnless {
                         repository.isAppIgnored(packageName)
                     }?.run {
