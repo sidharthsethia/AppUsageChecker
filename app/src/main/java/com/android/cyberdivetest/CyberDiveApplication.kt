@@ -29,7 +29,7 @@ class CyberDiveApplication : Application(), Configuration.Provider {
         createNotificationChannel(
             Constants.SERVICE_NOTIFICATION_CHANNEL,
             getString(R.string.app_monitoring_notification_channel_name),
-            NotificationManager.IMPORTANCE_HIGH
+            NotificationManager.IMPORTANCE_LOW
         )
         createNotificationChannel(
             Constants.ALERT_NOTIFICATION_CHANNEL,
