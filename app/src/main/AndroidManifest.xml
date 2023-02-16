@@ -32,6 +32,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.android.cyberdivetest.ui.views.activities.KillForegroundActivity"
+            android:theme="@style/Theme.CyberdiveTest.Translucent"/>
+
         <service android:name="com.android.cyberdivetest.services.AppUsageCheckService" />
     </application>
 

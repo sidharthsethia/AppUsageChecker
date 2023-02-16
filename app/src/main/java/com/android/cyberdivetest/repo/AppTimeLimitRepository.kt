@@ -10,4 +10,5 @@ interface AppTimeLimitRepository {
     fun getAppTimeLimitItem(packageName: String): Flow<AppTimeLimitItem>
     suspend fun saveAppTimeLimit(packageName: String, timeLimitInMin: Int)
     suspend fun deleteAppTimeLimit(packageName: String)
+    suspend fun deleteFromIgnoredAppList(packageName: String)
 }

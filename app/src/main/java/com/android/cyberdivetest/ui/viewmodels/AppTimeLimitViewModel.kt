@@ -59,6 +59,7 @@ class AppTimeLimitViewModel @Inject constructor(
          viewModelScope.launch(exceptionHandler) {
              _actionStateFlow.emit(ActionState.Loading)
              repository.saveAppTimeLimit(packageName, timeDurations[selectedPosition].durationInMin)
+             repository.deleteFromIgnoredAppList(packageName)
              _actionStateFlow.emit(ActionState.AppTimeLimitInsertSuccess)
          }
     }
@@ -67,6 +68,7 @@ class AppTimeLimitViewModel @Inject constructor(
         viewModelScope.launch(exceptionHandler) {
             _actionStateFlow.emit(ActionState.Loading)
             repository.deleteAppTimeLimit(packageName)
+            repository.deleteFromIgnoredAppList(packageName)
             _actionStateFlow.emit(ActionState.AppTimeLimitInsertSuccess)
         }
     }

@@ -94,6 +94,12 @@ class AppRepository @Inject constructor(
         }
     }
 
+    override suspend fun deleteFromIgnoredAppList(packageName: String) {
+        withContext(Dispatchers.IO) {
+            ignoredAppInfoDao.delete(packageName)
+        }
+    }
+
     override suspend fun addIgnoredApp(appInfo: IgnoredAppInfo) {
         withContext(Dispatchers.IO) {
             ignoredAppInfoDao.insert(appInfo)
