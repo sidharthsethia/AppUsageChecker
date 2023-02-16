@@ -3,6 +3,7 @@ package com.android.cyberdivetest.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.android.cyberdivetest.data.AppInfo
+import com.android.cyberdivetest.data.IgnoredAppInfo
 import com.android.cyberdivetest.data.MonitoredAppInfo
 
 /**
@@ -10,10 +11,11 @@ import com.android.cyberdivetest.data.MonitoredAppInfo
  */
 
 @Database(
-    entities = [AppInfo::class, MonitoredAppInfo::class],
+    entities = [AppInfo::class, MonitoredAppInfo::class, IgnoredAppInfo::class],
     version = 1
 )
 abstract class AppDB: RoomDatabase() {
     abstract fun getAppInfoDao(): AppInfoDao
     abstract fun getMonitoredAppInfoDao(): MonitoredAppInfoDao
+    abstract fun getIgnoredAppInfoDao(): IgnoredAppInfoDao
 }

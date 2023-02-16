@@ -2,7 +2,6 @@ package com.android.cyberdivetest.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.cyberdivetest.data.AppListItem
 import com.android.cyberdivetest.repo.AppListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,15 +12,11 @@ import javax.inject.Inject
  */
 
 @HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class AppListViewModel @Inject constructor(
     private val repository: AppListRepository
 ) : ViewModel() {
 
     val appListStateFlow = repository.getAppListItems()
-
-    fun onItemSelected(item: AppListItem) {
-
-    }
 
     fun update() {
         viewModelScope.launch { repository.fetchApps() }

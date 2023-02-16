@@ -10,7 +10,8 @@
         android:label="AppListFragment" >
         <action
             android:id="@+id/action_appListFragment_to_appTimeLimitFragment"
-            app:destination="@id/appTimeLimitFragment" />
+            app:destination="@id/appTimeLimitFragment"
+            app:popUpTo="@+id/appListFragment"/>
     </fragment>
     <fragment
         android:id="@+id/appTimeLimitFragment"
@@ -18,7 +19,12 @@
         android:label="AppTimeLimitFragment" >
         <action
             android:id="@+id/action_appTimeLimitFragment_to_appListFragment"
-            app:destination="@id/appListFragment" />
+            app:destination="@id/appListFragment"
+            app:popUpTo="@+id/appTimeLimitFragment"
+            app:popUpToInclusive="true"/>
+        <argument
+            android:name="id"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/usageStatsPermissionFragment"

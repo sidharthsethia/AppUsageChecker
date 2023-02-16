@@ -7,15 +7,19 @@ import android.os.UserManager
 import androidx.room.Room
 import com.android.cyberdivetest.db.AppDB
 import com.android.cyberdivetest.db.AppInfoDao
+import com.android.cyberdivetest.db.MonitoredAppInfoDao
 import com.android.cyberdivetest.helpers.AppListFetcher
 import com.android.cyberdivetest.helpers.AppListFetcherImpl
 import com.android.cyberdivetest.helpers.AppTimeSpentCalculator
 import com.android.cyberdivetest.helpers.AppTimeSpentCalculatorImpl
+import com.android.cyberdivetest.helpers.StringFetcher
+import com.android.cyberdivetest.helpers.StringFetcherImpl
 import com.android.cyberdivetest.helpers.UsageStatsPermissionChecker
 import com.android.cyberdivetest.helpers.UsageStatsPermissionCheckerImpl
 import com.android.cyberdivetest.others.Constants
 import com.android.cyberdivetest.repo.AppListRepository
-import com.android.cyberdivetest.repo.AppListRepositoryImpl
+import com.android.cyberdivetest.repo.AppRepository
+import com.android.cyberdivetest.repo.AppTimeLimitRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,6 +51,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMonitoredAppInfoDao(db: AppDB) = db.getMonitoredAppInfoDao()
+
+    @Singleton
+    @Provides
+    fun provideIgnoredAppInfoDao(db: AppDB) = db.getIgnoredAppInfoDao()
 
     @Provides
     fun providePackageManager(@ApplicationContext context: Context) = context.packageManager
@@ -80,8 +88,25 @@ object AppModule {
     ): AppListFetcher = AppListFetcherImpl(packageManager, timeSpentCalculator)
 
     @Provides
-    fun provideAppListRepository(
+    fun provideAppRepository(
         appListFetcher: AppListFetcher,
-        appInfoDao: AppInfoDao
-    ): AppListRepository = AppListRepositoryImpl(appListFetcher, appInfoDao)
+        appInfoDao: AppInfoDao,
+        monitoredAppInfoDao: MonitoredAppInfoDao
+    ): AppRepository = AppRepository(appListFetcher, appInfoDao, monitoredAppInfoDao)
+
+    @Provides
+    fun provideAppListRepository(
+        appRepository: AppRepository
+    ): AppListRepository = appRepository
+
+    @Provides
+    fun provideAppTimeLimitRepository(
+        appRepository: AppRepository
+    ): AppTimeLimitRepository = appRepository
+
+    @Singleton
+    @Provides
+    fun provideStringFetcher(
+        @ApplicationContext context: Context
+    ): StringFetcher = StringFetcherImpl(context)
 }

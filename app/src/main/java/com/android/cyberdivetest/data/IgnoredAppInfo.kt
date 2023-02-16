@@ -6,11 +6,11 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 /**
- * Created by Sidharth Sethia on 14/02/23.
+ * Created by Sidharth Sethia on 15/02/23.
  */
 @Parcelize
 @Entity
-data class MonitoredAppInfo(
+data class IgnoredAppInfo(
     @PrimaryKey val packageName: String,
-    val timeLimitInMin: Int
+    val timestamp: Long,
 ): Parcelable

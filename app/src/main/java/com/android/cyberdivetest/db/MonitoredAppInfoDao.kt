@@ -25,10 +25,7 @@ interface MonitoredAppInfoDao {
     fun getMonitoredApps(): Flow<List<MonitoredAppInfo>>
 
     @Query("SELECT * FROM MonitoredAppInfo WHERE packageName = :packageName")
-    fun getMonitoredApp(packageName: String): Flow<MonitoredAppInfo>
-
-    @Query("SELECT * FROM MonitoredAppInfo WHERE ignored = false")
-    fun getActiveMonitoredApps(): Flow<MonitoredAppInfo>
+    fun getMonitoredApp(packageName: String): Flow<MonitoredAppInfo?>
 
     @Delete
     fun delete(app: MonitoredAppInfo)

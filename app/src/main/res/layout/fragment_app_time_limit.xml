@@ -5,31 +5,73 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="@dimen/app_icon_size"
+        android:layout_height="@dimen/app_icon_size"
+        android:layout_marginTop="@dimen/border_big"
+        android:layout_marginStart="@dimen/border_regular"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_page_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/border_big"
+        app:layout_constraintTop_toTopOf="@+id/iv_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
         android:layout_marginStart="@dimen/border_regular"
         android:textSize="@dimen/text_size_page_title"
         tools:text = "App Name" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_time_used"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_icon"
+        android:layout_marginTop="@dimen/border_big"
+        android:layout_marginStart="@dimen/border_regular"
+        android:textSize="@dimen/text_size_title"
+        android:text = "@string/app_time_used" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_time_used_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/tv_time_used"
+        app:layout_constraintTop_toTopOf="@+id/tv_time_used"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_time_used"
+        android:layout_marginStart="@dimen/border_regular"
+        android:textSize="@dimen/text_size_page_title"
+        tools:text = "30 min" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time_limit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_page_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_used"
         android:layout_marginTop="@dimen/border_big"
         android:layout_marginStart="@dimen/border_regular"
         android:textSize="@dimen/text_size_title"
         android:text = "@string/app_time_limit" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_time_limit_value"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/border_regular"
+        app:layout_constraintStart_toEndOf="@+id/tv_time_limit"
+        app:layout_constraintTop_toTopOf="@+id/tv_time_limit"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_time_limit" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,17 +79,32 @@
         android:layout_marginTop="@dimen/border_big"
         android:layout_marginStart="@dimen/border_regular"
         android:textSize="@dimen/text_size_page_title"
-        tools:text = "30 min" />
+        android:text = "@string/app_save" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btn_save"
+        android:id="@+id/btn_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_time_limit_value"
+        app:layout_constraintStart_toEndOf="@+id/btn_save"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time_limit"
         android:layout_marginTop="@dimen/border_big"
         android:layout_marginStart="@dimen/border_regular"
         android:textSize="@dimen/text_size_page_title"
-        android:text = "@string/app_save" />
+        android:text = "@string/app_delete" />
+
+    <FrameLayout
+        android:id="@+id/progress_circular"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:translationZ="@dimen/border_regular"
+        android:background="@color/white"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ProgressBar
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
