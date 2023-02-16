@@ -44,7 +44,11 @@ class AppUsageCheckerWorker @AssistedInject constructor(
     private var noOfIgnoredApps = 0
 
     override suspend fun doWork(): Result {
-        performTasks()
+        try {
+            performTasks()
+        } catch (e: Exception) {
+            Timber.tag(Constants.APP_LOG_TAG).e(e)
+        }
         return Result.success()
     }
 
