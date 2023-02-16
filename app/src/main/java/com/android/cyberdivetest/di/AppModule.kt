@@ -130,9 +130,8 @@ object AppModule {
 
     @Provides
     fun provideForegroundAppChecker(
-        usageStatsManager: UsageStatsManager,
-        permissionChecker: UsageStatsPermissionChecker
-    ): ForegroundAppChecker = ForegroundAppCheckerImpl(usageStatsManager, permissionChecker)
+        @ApplicationContext context: Context
+    ): ForegroundAppChecker = ForegroundAppCheckerImpl(context)
 
 
     @Provides
