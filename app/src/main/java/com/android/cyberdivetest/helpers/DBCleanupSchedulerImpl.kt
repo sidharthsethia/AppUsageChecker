@@ -31,7 +31,7 @@ class DBCleanupSchedulerImpl(val context: Context): DBCleanupScheduler {
             .build()
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             Constants.PERIODIC_DB_CLEANER_WORK_NAME,
-            ExistingPeriodicWorkPolicy.REPLACE,  //Replace Existing Periodic Work policy
+            ExistingPeriodicWorkPolicy.UPDATE,  //Replace Existing Periodic Work policy
             periodicLaunchWork //work request
         )
     }
