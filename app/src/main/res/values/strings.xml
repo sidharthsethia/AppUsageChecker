@@ -3,7 +3,7 @@
     <string name="app_time_limit">Time limit</string>
     <string name="app_time_used">Time used today</string>
     <string name="app_save">Save</string>
-    <string name="app_delete">Delete</string>
+    <string name="app_remove">Remove</string>
     <string name="app_continue">Continue</string>
     <string name="app_time_in_mins">%d min</string>
     <string name="app_usage_stats_permission_rationale">We need the permission for usage history to calculate time spent using apps. \n\nPlease click on continue to provide the permission</string>
