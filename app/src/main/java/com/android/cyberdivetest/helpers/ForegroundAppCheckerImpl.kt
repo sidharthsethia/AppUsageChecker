@@ -1,7 +1,7 @@
 package com.android.cyberdivetest.helpers
 
-import android.app.ActivityManager
-import android.content.Context
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
 import androidx.collection.arraySetOf
 import com.android.cyberdivetest.others.Constants
 import timber.log.Timber
@@ -12,15 +12,25 @@ import timber.log.Timber
  */
 
 class ForegroundAppCheckerImpl(
-    private val context: Context
+    private val usageStatsManager: UsageStatsManager,
+    private val usageStatsPermissionChecker: UsageStatsPermissionChecker
 ): ForegroundAppChecker {
 
     override fun getCurrentForegroundApp(): Set<String> {
         val result = arraySetOf<String>()
-        val mActivityManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
-        mActivityManager.runningAppProcesses.forEachIndexed { index, processInfo ->
-            Timber.tag(Constants.APP_LOG_TAG).d("Foreground app $index from service - ${processInfo.processName}")
-            result.add(processInfo.processName)
+        if (usageStatsPermissionChecker.hasPermission()) {
+            val endTime = System.currentTimeMillis()
+            val startTime = endTime - Constants.ONE_MINUTE_IN_MILLIS
+            val usageEvents = usageStatsManager.queryEvents(startTime, endTime)
+            val event = UsageEvents.Event()
+
+            while (usageEvents.hasNextEvent()) {
+                usageEvents.getNextEvent(event)
+                if (event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
+                    result.add(event.packageName)
+                    Timber.tag(Constants.APP_LOG_TAG).d(" Foreground - ${event.packageName}")
+                }
+            }
         }
         return result
     }

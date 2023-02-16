@@ -90,6 +90,10 @@ class AppRepository @Inject constructor(
             }
     }
 
+    override suspend fun getIgnoredAppCount(): Int {
+        return ignoredAppInfoDao.getIgnoredAppCount()
+    }
+
     override fun getOverLimitApps(): Flow<List<AppTimeLimitItem>> {
         return getMonitoredApps().map { list ->
             list.filter { it.timeUsedInMin > it.timeLimitInMin }

@@ -34,4 +34,7 @@ interface IgnoredAppInfoDao {
 
     @Query("DELETE FROM IgnoredAppInfo")
     fun nukeTable()
+
+    @Query("SELECT COUNT() FROM MonitoredAppInfo")
+    fun getIgnoredAppCount(): Int
 }

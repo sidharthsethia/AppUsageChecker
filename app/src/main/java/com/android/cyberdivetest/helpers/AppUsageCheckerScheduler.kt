@@ -5,6 +5,6 @@ package com.android.cyberdivetest.helpers
  */
 interface AppUsageCheckerScheduler {
     fun schedulePeriodicAppUsageChecker()
-    fun scheduleServiceLaunch()
+    fun scheduleServiceLaunch(delayInMin: Int = 0)
     fun cancelFutureLaunches()
 }

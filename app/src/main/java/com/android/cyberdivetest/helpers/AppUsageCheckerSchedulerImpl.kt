@@ -9,6 +9,7 @@ import androidx.work.WorkManager
 import com.android.cyberdivetest.others.Constants
 import com.android.cyberdivetest.workers.AppUsageCheckerWorker
 import dagger.hilt.android.qualifiers.ApplicationContext
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -40,11 +41,13 @@ class AppUsageCheckerSchedulerImpl @Inject constructor(
         )
     }
 
-    override fun scheduleServiceLaunch() {
+    override fun scheduleServiceLaunch(delayInMin: Int) {
         val workRequest = OneTimeWorkRequestBuilder<AppUsageCheckerWorker>()
             .addTag(Constants.ONE_TIME_APP_USAGE_CHECKER_WORKER_TAG)
+            .setInitialDelay(delayInMin.toLong(), TimeUnit.MINUTES)
             .build()
         WorkManager.getInstance(context).enqueue(workRequest)
+        Timber.tag(Constants.APP_LOG_TAG).d("One Time Task - $delayInMin min")
     }
 
     override fun cancelFutureLaunches() {

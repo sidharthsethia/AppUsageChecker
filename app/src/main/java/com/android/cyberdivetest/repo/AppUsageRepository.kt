@@ -11,4 +11,6 @@ interface AppUsageRepository: AppDataFetcher {
     fun getOverLimitApps(): Flow<List<AppTimeLimitItem>>
     suspend fun addIgnoredApp(appInfo: IgnoredAppInfo)
     suspend fun isAppIgnored(packageName: String): Boolean
+
+    suspend fun getIgnoredAppCount(): Int
 }

@@ -10,6 +10,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.android.cyberdivetest.R
 import com.android.cyberdivetest.data.AppTimeLimitItem
+import com.android.cyberdivetest.helpers.AppUsageCheckerScheduler
 import com.android.cyberdivetest.helpers.ForegroundAppChecker
 import com.android.cyberdivetest.helpers.ScreenOnChecker
 import com.android.cyberdivetest.helpers.StringFetcher
@@ -19,7 +20,11 @@ import com.android.cyberdivetest.services.AppUsageCheckService
 import com.android.cyberdivetest.ui.views.activities.KillForegroundActivity
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 /**
  * Created by Sidharth Sethia on 16/02/23.
@@ -31,25 +36,45 @@ class AppUsageCheckerWorker @AssistedInject constructor(
     private val repository: AppUsageRepository,
     private val foregroundAppChecker: ForegroundAppChecker,
     private val screenOnChecker: ScreenOnChecker,
-    private val stringFetcher: StringFetcher
+    private val stringFetcher: StringFetcher,
+    private val scheduler: AppUsageCheckerScheduler
 ) : CoroutineWorker(context, workerParameters) {
+
+    private var noOfOverLimitApps = 0
+    private var noOfIgnoredApps = 0
 
     override suspend fun doWork(): Result {
         performTasks()
         return Result.success()
     }
 
+    private suspend fun scheduleOneOfTaskIfNeeded() {
+        noOfIgnoredApps = withContext(Dispatchers.IO) {
+            repository.getIgnoredAppCount()
+        }
+        Timber.tag(Constants.APP_LOG_TAG).d("scheduleOneOfTaskIfNeeded - $noOfIgnoredApps, $noOfOverLimitApps")
+        if (noOfOverLimitApps - noOfIgnoredApps > 0) {
+            scheduler.scheduleServiceLaunch(Constants.ONE_TIME_APP_USAGE_CHECKER_WORKER_DELAY)
+        }
+    }
+
     private suspend fun performTasks() {
-        repository.fetchApps()
-        repository.getOverLimitApps().collectLatest { list ->
+        withContext(Dispatchers.IO) {
+            repository.fetchApps()
+        }
+        repository.getOverLimitApps().flowOn(Dispatchers.IO).collectLatest { list ->
+            noOfOverLimitApps = list.size
             val currentForegroundAppSet = foregroundAppChecker.getCurrentForegroundApp()
             list.find { currentForegroundAppSet.contains(it.packageName) }
                 ?.takeUnless { item ->
-                    repository.isAppIgnored(item.packageName)
+                    withContext(Dispatchers.IO) {
+                        repository.isAppIgnored(item.packageName)
+                    }
                 }?.run {
                     showAlert(this)
                 }
         }
+        scheduleOneOfTaskIfNeeded()
     }
 
     private fun showAlert(item: AppTimeLimitItem) {
@@ -78,6 +103,7 @@ class AppUsageCheckerWorker @AssistedInject constructor(
                 .setContentText(stringFetcher.getString(R.string.app_overuse_alert_message))
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
+                .setOnlyAlertOnce(true)
                 .setAutoCancel(true)
                 .addAction(
                     0,
