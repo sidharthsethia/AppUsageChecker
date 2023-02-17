@@ -20,7 +20,7 @@ class ForegroundAppCheckerImpl(
         val result = arraySetOf<String>()
         if (usageStatsPermissionChecker.hasPermission()) {
             val endTime = System.currentTimeMillis()
-            val startTime = endTime - Constants.ONE_MINUTE_IN_MILLIS
+            val startTime = endTime - Constants.ONE_MINUTE_IN_MILLIS * 2
             val usageEvents = usageStatsManager.queryEvents(startTime, endTime)
             val event = UsageEvents.Event()
 
@@ -28,10 +28,13 @@ class ForegroundAppCheckerImpl(
                 usageEvents.getNextEvent(event)
                 if (event.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
                     result.add(event.packageName)
-                    Timber.tag(Constants.APP_LOG_TAG).d(" Foreground - ${event.packageName}")
+                    Timber.tag(Constants.APP_LOG_TAG).d("Foreground - ${event.packageName}")
+                } else {
+                    Timber.tag(Constants.APP_LOG_TAG).d("Not Foreground - ${event.packageName}")
                 }
             }
         }
+        Timber.tag(Constants.APP_LOG_TAG).d("foreground result - $result")
         return result
     }
 }
