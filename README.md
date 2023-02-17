@@ -28,6 +28,7 @@ app which has crossed the time limit. The 15 min time limit is an Android
 limitation if we want to cater to users on Android 12 and above. I have tried
 using a hack to listen for every 1 minute in case we have an which has 
 crossed the limit but the result has been flaky.
+- All the modules, packages and classes are implemented keeping testing in mind. 
 
 Screenshots
 
