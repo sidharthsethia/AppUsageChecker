@@ -1,4 +1,4 @@
-# CyberdiveTest
+# App Usage Checker
 
 Stack
 - The project is 100% Kotlin
